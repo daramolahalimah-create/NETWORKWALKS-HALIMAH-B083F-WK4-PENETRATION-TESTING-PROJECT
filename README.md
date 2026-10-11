@@ -47,6 +47,11 @@ This report covers full-black box penetration testing & vulnerability assessment
 - I then copied the full hash value and and ran it in **networkwalk password cracker**. The result revealed the password of the encrypted files.
 - I then used the password to open the files. The result revealed the test results.
 
+**4.3 Milestone 3**
+- I used **exiftool unlocked_patient_report_3.pdf** to read the metadata of the patient report 3. The result showed hidden informations of the pdf file, including a robot file that point to /old.
+- I then downloaded the file by going to **https://medirozahospital.com/old/** which revealed the backup file **mediroza_db_backup_2019.sql**
+- I used chatGPT to open the file . The result showed list of shareholders.
+
 ### 5. Risk Analysis/Impact
 | # | Risk | Evidence | Potential Impact | Risk Level |
 |---|---|---|---|---|
@@ -54,6 +59,7 @@ This report covers full-black box penetration testing & vulnerability assessment
 |2.| Authentication bypass & weak access control | Successful login to the patient portal using SQL injection payloads without valid user credentials | Unauthorized access to protected system areas, administrative features and confidential patient records | Critical |
 |3.| Confidential patient data exposure | Downloading 3 confidential patient lab reports from the patient portal following authentication bypass | Severe breach of patient privacy, potential regulatory non-compliance and  reputational damage | Critical |
 |4.| Weak password hashing and cracking | Successfully extracted file hashes using Networkwalks Hash Calculator and cracked them via Networkwalks Password Cracker to reveal plain-text passwords | Encrypted medical test results and sensitive files can be easily decrypted and viewed by unauthorized parties once accessed | Medium |
+|5.| Insecure storage and lack of post-exfiltration security controls | Downloaded patient records stored without supplementary encryption layers or access restriction controls post-download | Persistence of exposure; if a workstation or server directory is compromised, sensitive medical documents remain instantly readable to attackers without secondary decryption hurdles | High|
 
 ---
 
@@ -67,11 +73,13 @@ This report covers full-black box penetration testing & vulnerability assessment
 - Upgrade Encryption Standards: Replace weak password hashing algorithms with strong, modern key-derivation functions such as bcrypt or Argon2 to protect stored files against offline cracking.
 
 - Access Control & Rate Limiting: Implement strict session management, role-based access controls, and rate limiting/account lockout policies to defend against automated payload attempts.
+  
+- Secure Post-Download Storage & Data-at-Rest Protection : Ensure that exported or downloaded sensitive reports utilize robust file-level encryption (such as AES-256) and strict access permission configurations to secure data even outside the active web boundary.
 
 ---
 
 ### 7. Conclusion
-During week 4 of my Cybersecurity & Ethical Hacking Internship, i successfully completed penetration testing assessment on the target patient portal application across two major project milestones. In Milestone 1, network reconnaissance revealed open HTTP/HTTPS ports (80 & 443), and using SQL injection payloads ('or 1=1 limit 1-- and admin'--), I bypassed authentication controls and exfiltrated three confidential patient lab reports. In Milestone 2, I extracted the file hashes using the Networkwalks Hash Calculator and cracked them with the Networkwalks Password Cracker to reveal the plain-text passwords and open the test results. Addressing these findings by enforcing input sanitization, adopting parameterized queries, suppressing database error messages, and upgrading file encryption—will eliminate the identified attack vectors, strengthen the system’s security posture, and ensure regulatory compliance such as HIPAA.
+During week 4 of my Cybersecurity & Ethical Hacking Internship, i successfully completed penetration testing assessment on the target patient portal application across two major project milestones. In Milestone 1, network reconnaissance revealed open HTTP/HTTPS ports (80 & 443), and using SQL injection payloads ('or 1=1 limit 1-- and admin'--), I bypassed authentication controls and exfiltrated three confidential patient lab reports. In Milestone 2, I extracted the file hashes using the Networkwalks Hash Calculator and cracked them with the Networkwalks Password Cracker to reveal the plain-text passwords and open the test results. In Milestone 3, I analyzed post-exfiltration data handling, exposing risks associated with unencrypted local storage of downloaded files.Addressing these findings by enforcing input sanitization, adopting parameterized queries, suppressing database error messages, and upgrading file encryption—will eliminate the identified attack vectors, strengthen the system’s security posture, and ensure regulatory compliance such as HIPAA.
 
 ---
 
